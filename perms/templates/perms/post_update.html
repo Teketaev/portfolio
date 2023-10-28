@@ -1,0 +1,12 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Edit the Post{% endblock title %}
+
+{% block content %}
+    <p><a href="{% url 'perms:post_list' %}" class="go-back-link">Go back</a></p>
+    <form method="POST" class="post-update-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Update" class="update-button">
+    </form>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Home Page{% endblock title %}
+
+{% block content %}
+    <div class="home-header">
+        <h2>Welcome to Alimzhan's Portfolio</h2>
+        <p>Backend Django Developer</p>
+    </div>
+
+    <div class="projects">
+        <div class="project">
+            <h3 id="dj-pr">Django Projects</h3>
+            <div class="project-item">
+                <h4>CRUD Operations</h4>
+                <p>CRUD operations, including search, filtering, ordering, and pagination.</p>
+                <a href="{% url 'django_crud:movie_list' %}" class="project-link">Movie Listing Project</a>
+            </div>
+            <div class="project-item">
+                <h4>Roles and Permissions</h4>
+                <p>Restrictions and user banning/unbanning functionality.</p>
+                <a href="{% url 'perms:post_list' %}" class="project-link">Blog Posts Project</a>
+            </div>
+        </div>
+
+        <div class="project">
+            <h3 id="drf-pr">Django-Rest Framework</h3>
+            <div class="project-item">
+                <h4>API Creation</h4>
+                <p>Creation of APIs using Django-Rest Framework.</p>
+                <a href="#" class="project-link">API Project (Coming Soon)</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

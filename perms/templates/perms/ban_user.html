@@ -1,0 +1,23 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Ban User{% endblock title %}
+
+{% block content %}
+    <div class="ban-user-container">
+        <a href="{% url 'perms:post_list' %}" class="go-back-link">Go Back</a>
+        <h2 class="ban-message">You are about to ban the user:<strong>[{{ user.username }}]</strong></h2>
+        <form method="POST" class="ban-user-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Ban" class="ban-button">
+        </form>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock content %}

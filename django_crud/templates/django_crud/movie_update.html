@@ -1,0 +1,17 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Update Movie{% endblock title %}
+
+{% block content %}
+    <a href="{% url 'django_crud:movie_list' %}" class="go-back-link">
+        <i class="fas fa-arrow-left"></i> Go Back
+    </a>
+    <h1 class="update-heading">Update Movie</h1>
+    <form method="POST" enctype="multipart/form-data" class="update-movie-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="update-button">
+            Update Movie
+        </button>
+    </form>
+{% endblock content %}

@@ -1,0 +1,12 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Delete a Post{% endblock title %}
+
+{% block content %}
+  <p><a href="{% url 'perms:post_list' %}" class="go-back-link">Go back</a></p>
+  <p class="confirmation-message">Are you sure you want to delete the post "{{ post.title }}"?</p>
+  <form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Delete" class="delete-button">
+  </form>
+{% endblock content %}

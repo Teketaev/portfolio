@@ -1,0 +1,49 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Post Information{% endblock title %}
+
+{% block content %}
+    <div class="post-detail-container">
+        <a href="{% url 'perms:post_list' %}" class="go-back-link">Go back</a>
+
+        <div class="post-details">
+            <h1 class="post-title">{{ post.title }}</h1>
+            <ul class="post-info">
+                <li class="post-author">Author: {{ post.author }}</li>
+                <li class="post-posted">Posted: {{ post.time_posted }}</li>
+                <li class="post-updated">Updated: {{ post.time_updated|timesince }} ago</li>
+            </ul>
+            <div class="post-content">{{ post.content }}</div>
+        </div>
+        {% if post.allow_comments %}
+            <h2 class="comments-header">Comments:</h2>
+            <ul class="comment-list">
+                {% for comment in post.comments.all %}
+                    <li class="comment">
+                        <div class="comment-info">
+                            <span class="comment-author">Author: {{ comment.author }}</span>
+                            <span class="comment-time">{{ comment.time_posted|timesince }} ago</span>
+                        </div>
+                        <p class="comment-content">{{ comment.content }}</p>
+
+                        {% if request.user == comment.author %}
+                            <form method="post" action="{% url 'perms:comment_delete' comment.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="comment-delete-button">Delete</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <h2 class="add-comment-header">Add a Comment:</h2>
+            <form method="POST" action="{% url 'perms:post_detail' post.pk %}" class="comment-form">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit" class="comment-submit-button">Add a Comment</button>
+            </form>
+        {% else %}
+            <p id="comments-forbidden">Comments are not allowed for this post</p>
+        {% endif %}
+    </div>
+{% endblock content %}

@@ -1,0 +1,43 @@
+{% extends 'base/main.html' %}
+{% load banned_user_tags %}
+
+{% block title %}Blog Posts{% endblock title %}
+
+{% block content %}
+    <div class="post-list-container">
+        <a href="{% url 'perms:post_create' %}" class="create-post-button">Create a New Post</a>
+
+        <div class="post-list">
+            {% for post in posts %}
+                <div class="post-card">
+                    <div class="post-header">
+                        <span class="post-author">Author: {{ post.author }}</span>
+                        <span class="post-time">Posted: {{ post.time_posted }}</span>
+                    </div>
+                    <h2 class="post-title"><a href="{% url 'perms:post_detail' post.id %}">{{ post.title }}</a></h2>
+                    <div class="post-content">{{ post.content }}</div>
+                    <div class="post-footer">
+                        <span class="post-updated">Last Updated: {{ post.time_updated|timesince }} ago</span>
+
+                        {% if request.user == post.author or is_mod_or_admin %}
+                            <a href="{% url 'perms:post_update' post.id %}" class="edit-post-button">Edit</a>
+                            <a href="{% url 'perms:post_delete' post.id %}" class="delete-post-button">Delete</a>
+                        {% else %}
+                            <span class="disabled-edit-button">Edit</span>
+                            <span class="disabled-delete-button">Delete</span>
+                        {% endif %}
+
+                        {% if not post.author|is_banned %}
+                            <a href="{% url 'perms:ban_user' post.author.id %}" class="ban-user-button">Ban this User</a>
+                        {% else %}
+                            <span class="user-banned-text">The author of this post is currently banned</span>
+                            <a href="{% url 'perms:unban_user' post.author.id %}" class="unban-user-button">Unban this User</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="no-posts-message">No posts</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

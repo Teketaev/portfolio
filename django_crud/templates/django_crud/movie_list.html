@@ -1,0 +1,87 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Django CRUD{% endblock title %}
+
+{% block content %}
+    <div class="movie-list-container">
+        <h2 id="capitalize-category-genre">
+            {% if request.GET.category %}
+                {{ request.GET.category }} movies
+            {% endif %}
+
+            {% if request.GET.genre %}
+                {{ request.GET.genre }} movies
+            {% endif %}
+        </h2>
+
+        <div class="filters">
+            <div class="filter-group">
+                <p>Categories:</p>
+                <div class="category-boxes">
+                    <a href="{% url 'django_crud:movie_list' %}" class="category-box all-categories">All Categories</a>
+                    {% for category in categories %}
+                    <a href="?category={{ category.slug }}" class="category-box">{{ category.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <p>Genres:</p>
+                <div class="genre-boxes">
+                    <a href="{% url 'django_crud:movie_list' %}" class="genre-box all-genres">All Genres</a>
+                    {% for genre in genres %}
+                    <a href="?genre={{ genre.slug }}" class="genre-box">{{ genre.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <a href="{% url 'django_crud:movie_create' %}" class="add-movie-link">Add a Movie</a>
+
+        <hr>
+
+
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search..." value="{{ request.GET.search }}" class="search-input">
+            <input type="submit" value="Search" class="search-button">
+            <label for="only-title" class="title-only-label">
+            <input type="checkbox" id="only-title" name="only_title" {% if request.GET.only_title %} checked {% endif %}>
+                 Title Only Search
+            </label>
+
+            <select name="order_created" id="order-created" class="order-select">
+                <option value="asc" {% if request.GET.order_created == 'asc' %}selected{% endif %}>Ascending</option>
+                <option value="desc" {% if request.GET.order_created == 'desc' %}selected{% endif %}>Descending</option>
+            </select>
+        </form>
+
+        {% if request.GET.search %}
+            <p class="search-results">The results of the search "{{ request.GET.search }}":</p>
+        {% endif %}
+
+        {% for movie in movies %}
+            <div class="movie-item">
+                <a href="{% url 'django_crud:movie_detail' movie.slug %}">
+                    <img src="{{ movie.image.url }}" alt="{{ movie.title }}" class="movie-image">
+                </a>
+                <div class="movie-details">
+                    <h3><a href="{% url 'django_crud:movie_detail' movie.slug %}" class="movie-title">{{ movie.title }}</a></h3>
+                    <p class="movie-description">Description: {{ movie.description }}</p>
+                    <p class="movie-category">Category: {{ movie.category }}</p>
+                    <p class="movie-genres">Genres:
+                        {% for genre in movie.genre.all %}
+                            {{ genre.name }}
+                        {% endfor %}
+                    </p>
+                    <p class="movie-added">Added: {{ movie.time_created }}</p>
+                    <p class="movie-updated">Updated: {{ movie.time_updated|timesince }} ago</p>
+                    <p class="movie-added-by">Added by: {{ movie.user }}</p>
+                </div>
+                <p><a href="{% url 'django_crud:movie_update' movie.slug %}" class="edit-link">Edit</a></p>
+                <p><a href="{% url 'django_crud:movie_delete' movie.slug %}" class="delete-link">Delete</a></p>
+            </div>
+        {% empty %}
+            <p class="no-movies">No movies to be listed</p>
+        {% endfor %}
+    </div>
+{% endblock content %}

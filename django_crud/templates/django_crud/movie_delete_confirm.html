@@ -1,0 +1,18 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Delete a Movie{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <a href="{% url 'django_crud:movie_list' %}" class="go-back-link">Go back</a>
+                <form method="POST" enctype="multipart/form-data" class="delete-movie-form">
+                    {% csrf_token %}
+                    <p class="delete-message">Are you sure you want to delete "{{ movie.title }}"?</p>
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
